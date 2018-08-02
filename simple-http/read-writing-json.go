@@ -8,7 +8,10 @@ import (
 const port = 8080
 
 type healthcheckMessage struct {
-  Message string
+  Message string `json:"message"`
+  Author string `json:"-"`
+  Date string `json:",omitempty"`
+  Id int `json:"id, string"`
 }
 
 func main() {
@@ -18,10 +21,12 @@ func main() {
 }
 
 func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
-  response := healthcheckMessage{Message: "Ok"}
-  data, err := json.Marshal(response)
-  if err != nil {
-    panic("Something wrong")
-  }
-  fmt.Fprint(w, string(data))
+  response := healthcheckMessage{Message: "Ok", Author: "Jame", Date: "2018", Id: 1}
+  // data, err := json.Marshal(response)
+  // if err != nil {
+  //   panic("Something wrong")
+  // }
+  // fmt.Fprint(w, string(data))
+  encoder := json.NewEncoder(w)
+  encoder.Encode(response)
 }
